@@ -1,0 +1,30 @@
+<div class="page-header">
+	<h1>Customers</h1>
+</div>
+
+<listing-builder input-model="list.inputModel" list="list.records" save-callback="list.addRecord" edit-callback="list.editRecord" update-callback="list.updateRecord" delete-callback="list.deleteRecord" set-order-callback="list.setOrder" search-callback="list.searchRecord"></listing-builder>
+
+<nav>
+	<ul class="pagination">
+		<li ng-if="list.first > 0">
+			<a aria-label="First" ng-click="list.viewList(list.first)">
+				<span aria-hidden="true"><<</span>
+			</a>
+		</li>
+		<li ng-if="list.prev > 0">
+			<a aria-label="Previous" ng-click="list.viewList(list.prev)">
+				<span aria-hidden="true"><</span>
+			</a>
+		</li>
+		<li ng-if="list.next > 0">
+			<a aria-label="Next" ng-click="list.viewList(list.next)">
+				<span aria-hidden="true">></span>
+			</a>
+		</li>
+		<li ng-if="list.last > 0">
+			<a aria-label="Last" ng-click="list.viewList(list.last)">
+				<span aria-hidden="true">>></span>
+			</a>
+		</li>
+	</ul>
+</nav>

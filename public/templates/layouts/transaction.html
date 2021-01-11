@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li><a ui-sref="transaction.summary">Summary</a></li>
+            <li><a ui-sref="transaction.sales_invoice">Create Delivery Receipt</a></li>
+            <li><a ui-sref="transaction.sales_invoice_list">Delivery Receipt Listing</a></li>
+            <li><a ui-sref="transaction.inventory_adjustment">Create Credit/Debit Memo</a></li>
+            <li><a ui-sref="transaction.inventory_adjustment_list">Credit/Debit Memo Listing</a></li>
+        </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+			<div ui-view></div>
+
+        </div>
+    </div>
+</div>

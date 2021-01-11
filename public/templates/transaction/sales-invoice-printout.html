@@ -1,0 +1,41 @@
+<div>
+{! '&nbsp;' | padleft: '&nbsp;':25 !}<span style="font-size: 24px;">OCTOMAR TRADING</span> <br />
+{! 'Lucio Racuma SR., P.5, San Jose, Malaybalay City' | padleft: '&nbsp;':62 !} <br />
+{! 'Tel./Fax: (032)-4903719/ (032)-4909031' | padleft: '&nbsp;':56 !} <br />
+{! 'Cell: 09228994508' | padleft: '&nbsp;':46 !} <br />
+{! 'Email: octomartrading@gmail.com' | padleft: '&nbsp;':53 !} <br />
+ <br />
+PACKING LIST# : {! printout.transactionID | padleft: '0':7 !} <br />
+DATE{! ':' | padleft: '&nbsp;':11 !} {! printout.printDate !} <br />
+CUSTOMER{! ':' | padleft: '&nbsp;':7 !} <span style="font-size: 20px;">{! printout.transaction.transactor.name !}</span> <br />
+ADDRESS{! ':' | padleft: '&nbsp;':8 !} {! printout.transaction.transactor.address !} <br />
+TERMS{! ':' | padleft: '&nbsp;':10 !} {! printout.transaction.remarks !} <br />
+PO#{! ':' | padleft: '&nbsp;':12 !} {! printout.transaction.ref_no !} <br />
+
+================================================================================ <br />
+&nbsp;QTY{! '&nbsp;' | padleft: '&nbsp;':2 !}
+UNIT{! '&nbsp;' | padleft: '&nbsp;':15 !}
+PARTICULAR{! '&nbsp;' | padleft: '&nbsp;':18 !}
+UNIT PRICE{! '&nbsp;' | padleft: '&nbsp;':4 !}
+AMOUNT <br />
+----- ------ ----------------------------------------- ------------ ------------ <br />
+<div ng-repeat="detail in printout.transactionDetails track by $index">
+	<div ng-if="detail">
+	{! detail.qty | padleft: '&nbsp;':5 !}
+	{! detail.item.unit | padleft: '&nbsp;':6 !}
+	{! detail.item.name | padright: '&nbsp;':40 !}
+	{! detail.trans_price | number:2 | padleft: '&nbsp;':13 !}
+	{! detail.qty * detail.trans_price | number:2 | padleft: '&nbsp;':12 !}
+	</div>
+	<div ng-if="!detail">
+		&nbsp;
+	</div>
+</div>
+----- ------ ----------------------------------------- ------------ ------------ <br />
+{! 'TOTAL:' | padleft: '&nbsp;':66 !} {! printout.printTotal | number:2 | padleft: '&nbsp;':12 !}<br />
+PREPARED BY: {! printout.transaction.prepared_by !}<br /><br />
+{! 'RECEIVED THE ABOVE ITEMS' | padleft: '&nbsp;':77 !}  <br />
+{! 'IN GOOD ORDER AND CONDITION' | padleft: '&nbsp;':80 !} <br /><br />
+{! 'BY:' | padleft: '&nbsp;':70 !}__________
+{! 'DATE:' | padleft: '&nbsp;':70 !}__________
+</div>

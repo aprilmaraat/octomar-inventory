@@ -1,0 +1,16 @@
+<div class="form-group" ng-repeat="inputObj in inputModel track by $index">
+
+	<label class="col-sm-2 control-label">{! inputObj.label !}</label>
+
+	<div class="col-sm-10">
+
+		<input type="text" class="form-control" placeholder="{! inputObj.label !}" ng-if="inputObj.type == 'text'" ng-model="model[inputObj.name]" ng-required="inputObj.required" />
+
+		<select class="form-control" ng-if="inputObj.type == 'select'" ng-model="model[inputObj.name]" ng-required="input.required" ng-options="optionObj.value as optionObj.label for optionObj in inputObj.selectOptions">
+		</select>
+
+		<textarea class="form-control" placeholder="{! inputObj.label !}" ng-if="inputObj.type == 'textarea'" ng-model="model[inputObj.name]" ng-required="inputObj.required"></textarea>
+
+	</div>
+
+</div>

@@ -1,0 +1,305 @@
+<div class="page-header">
+	<h1>Items</h1>
+</div>
+
+<div class="well well-sm">
+
+    <div class="pull-left form-inline">
+
+        <label>Search</label>
+        <div class="form-group">
+            <input class="form-control" type="text" ng-model="list.searchText" ng-model-options="{ debounce: 300 }" ng-change="list.searchRecord()" />
+        </div>
+
+    </div>
+
+    <div class="pull-right" ng-if="!listingOnly">
+        <button type="button" class="btn btn-default" ng-click="list.newRecord()">
+            <i class="glyphicon glyphicon-plus"></i>
+            Add New
+        </button>
+    </div>
+
+    <div class="clearfix"></div>
+
+</div>
+
+<table class="table table-bordered table-condensed">
+
+	<thead>
+	    <tr>
+	        <th>
+	            <div ng-click="list.setOrder('name')">
+	                Name
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="list.orderObj.with == 'name' && !list.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="list.orderObj.with == 'name' && list.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th>
+	            <div ng-click="list.setOrder('description')">
+	                Description
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="list.orderObj.with == 'description' && !list.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="list.orderObj.with == 'description' && list.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th>
+	            <div ng-click="list.setOrder('base_price')">
+	                Base Price
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="list.orderObj.with == 'base_price' && !list.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="list.orderObj.with == 'base_price' && list.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th>
+	            <div ng-click="list.setOrder('unit')">
+	                Unit
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="list.orderObj.with == 'unit' && !list.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="list.orderObj.with == 'unit' && list.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th style="width: 90px;">Actions</th>
+	    </tr>
+	</thead>
+
+	<tbody>
+
+		<tr ng-repeat="item in list.records">
+			<td>{! item.name !}</td>
+			<td>{! item.description !}</td>
+			<td class="text-right">{! item.base_price | number: 2 !}</td>
+			<td>{! item.unit !}</td>
+			<td>
+	            <div class="btn-group">
+	                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+	                    Action <span class="caret"></span>
+	                </button>
+	                <ul class="dropdown-menu dropdown-menu-right">
+	                    <li ng-click="list.copyDetails(item)">
+	                        <a href="javascript:void(0);">
+	                            <i class="glyphicon glyphicon-copy"></i>
+	                            Copy Details
+	                        </a>
+	                    </li>
+	                    <li ng-click="list.editRecord(item)">
+	                        <a href="javascript:void(0);">
+	                            <i class="glyphicon glyphicon-pencil"></i>
+	                            EDIT
+	                        </a>
+	                    </li>
+	                    <li ng-click="list.deleteRecord(item)">
+	                        <a href="javascript:void(0);">
+	                            <i class="glyphicon glyphicon-remove"></i>
+	                            DELETE
+	                        </a>
+	                    </li>
+	                </ul>
+	        	</div>
+			</td>
+		</tr>
+
+	    <tr ng-if="list.records.length == 0">
+	        <td colspan="5" class="text-center">
+	            No records found!
+	        </td>
+	    </tr>
+
+	</tbody>
+
+</table>
+
+<nav>
+	<ul class="pagination">
+		<li ng-if="list.first > 0">
+			<a aria-label="First" ng-click="list.viewList(list.first)">
+				<span aria-hidden="true"><<</span>
+			</a>
+		</li>
+		<li ng-if="list.prev > 0">
+			<a aria-label="Previous" ng-click="list.viewList(list.prev)">
+				<span aria-hidden="true"><</span>
+			</a>
+		</li>
+		<li ng-if="list.next > 0">
+			<a aria-label="Next" ng-click="list.viewList(list.next)">
+				<span aria-hidden="true">></span>
+			</a>
+		</li>
+		<li ng-if="list.last > 0">
+			<a aria-label="Last" ng-click="list.viewList(list.last)">
+				<span aria-hidden="true">>></span>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+<div class="modal fade" id="mdlForm" data-backdrop="static">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+	                <span aria-hidden="true">&times;</span>
+	            </button>
+	            <h4 class="modal-title">Add New</h4>
+	        </div>
+
+	        <form name="itemForm" novalidate ng-submit="list.saveModel(itemForm)">
+
+	            <div class="modal-body">
+
+	                <div class="form-horizontal">
+
+	                    <div 
+		                    class="form-group" 
+		                    ng-class="{ 'has-error': itemForm['name'].$invalid && itemForm.$submitted }">
+
+	                        <label class="col-sm-2 control-label">Name</label>
+
+	                        <div class="col-sm-10">
+
+	                            <input 
+		                            class="form-control" 
+		                            name="name" 
+		                            type="text" 
+		                            ng-model="list.currentItem.name" 
+		                            ng-required="true" />
+
+                                <span 
+	                                class="help-block" 
+	                                ng-show="itemForm['name'].$error.required && itemForm.$submitted">
+	                                You must enter a Name
+                                </span>
+
+	                        </div>
+
+	                    </div>
+
+	                    <div 
+		                    class="form-group" 
+		                    ng-class="{ 'has-error': itemForm['description'].$invalid && itemForm.$submitted }">
+
+	                        <label class="col-sm-2 control-label">Description</label>
+
+	                        <div class="col-sm-10">
+
+	                            <textarea
+		                            class="form-control" 
+		                            name="description" 
+		                            ng-model="list.currentItem.description" 
+		                            ng-required="true"></textarea>
+
+                                <span 
+	                                class="help-block" 
+	                                ng-show="itemForm['description'].$error.required && itemForm.$submitted">
+	                                You must enter a Description
+                                </span>
+
+	                        </div>
+
+	                    </div>
+
+	                    <div 
+		                    class="form-group" 
+		                    ng-class="{ 'has-error': itemForm['base_price'].$invalid && itemForm.$submitted }">
+
+	                        <label class="col-sm-2 control-label">Base Price</label>
+
+	                        <div class="col-sm-10">
+
+	                            <input 
+		                            class="form-control" 
+		                            name="base_price" 
+		                            type="text" 
+		                            ng-model="list.currentItem.base_price" 
+		                            ng-required="true" />
+
+                                <span 
+	                                class="help-block" 
+	                                ng-show="itemForm['base_price'].$error.required && itemForm.$submitted">
+	                                You must enter a Base Price
+                                </span>
+
+	                        </div>
+
+	                    </div>
+
+	                    <div 
+		                    class="form-group" 
+		                    ng-class="{ 'has-error': itemForm['unit'].$invalid && itemForm.$submitted }">
+
+	                        <label class="col-sm-2 control-label">Unit</label>
+
+	                        <div class="col-sm-10">
+
+	                            <input 
+		                            class="form-control" 
+		                            name="unit" 
+		                            type="text" 
+		                            ng-model="list.currentItem.unit" 
+		                            ng-required="true" />
+		                            
+                                <span 
+	                                class="help-block" 
+	                                ng-show="itemForm['unit'].$error.required && itemForm.$submitted">
+	                                You must enter a Unit
+                                </span>
+
+	                        </div>
+
+	                    </div>
+
+	                    <div 
+		                    class="form-group" 
+		                    ng-class="{ 'has-error': itemForm['new_item_inventory'].$invalid && itemForm.$submitted }"
+		                    ng-if="!list.currentItem.id">
+
+	                        <label class="col-sm-2 control-label">Initial Inventory</label>
+
+	                        <div class="col-sm-10">
+
+	                            <input 
+		                            class="form-control" 
+		                            name="new_item_inventory" 
+		                            type="text" 
+		                            ng-model="list.newItemInventory" />
+
+	                        </div>
+
+	                    </div>
+
+	                </div>
+
+	            </div>
+
+	            <div class="modal-footer">
+
+	                <button type="submit" class="btn btn-primary">
+	                    <i class="glyphicon glyphicon-floppy-disk"></i>
+	                    Save
+	                </button>
+
+	                <button type="button" class="btn btn-default" data-dismiss="modal">
+	                    Close
+	                </button>
+
+	            </div>
+
+	        </form>
+
+	    </div>
+	</div>
+</div>

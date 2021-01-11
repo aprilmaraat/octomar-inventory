@@ -1,0 +1,23 @@
+<div>
+{! '&nbsp;' | padleft: '&nbsp;':25 !}<span style="font-size: 24px;">OCTOMAR TRADING</span> <br />
+{! 'Lucio Racuma SR., P.5, San Jose, Malaybalay City' | padleft: '&nbsp;':62 !} <br />
+{! 'Tel./Fax: (032)-4903719/ (032)-4909031' | padleft: '&nbsp;':56 !} <br />
+{! 'Cell: 09228994508' | padleft: '&nbsp;':46 !} <br />
+{! 'Email: octomartrading@gmail.com' | padleft: '&nbsp;':53 !} <br />
+<br />
+
+{! 'ITEM INVENTORY SUMMARY (as of ' + printout.printoutDate + ')' | padleft: '&nbsp;':59 !} <br />
+
+================================================================================ <br />
+{! '&nbsp;' | padleft: '&nbsp;':7 !}
+PARTICULAR{! '&nbsp;' | padleft: '&nbsp;':10 !}
+STK ON HND{! '&nbsp;' | padleft: '&nbsp;':8 !}
+PARTICULAR{! '&nbsp;' | padleft: '&nbsp;':10 !}
+STK ON HND{! '&nbsp;' | padleft: '&nbsp;':8 !}<br />
+---------------------------- ---------- ---------------------------- ---------- <br />
+<div style="width: 672px; columns: 2;">
+	<div ng-repeat="item in printout.items track by $index">
+	{! item.name | padright: '&nbsp;':28 !}{! item.total_inventory | padleft: '&nbsp;':10 !}
+	</div>
+</div>
+---------------------------- ---------- ---------------------------- ---------- <br />

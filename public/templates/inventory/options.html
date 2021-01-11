@@ -1,0 +1,103 @@
+<div class="page-header">
+	<h1>Options</h1>
+</div>
+
+<div class="form-horizontal">
+
+	<div class="row">
+
+    	<div class="col-sm-5 col-sm-offset-1">
+
+			<div class="panel panel-danger">
+				<div class="panel-heading">Set Auto Increment Number</div>
+				<div class="panel-body">
+
+			        <div 
+			            class="form-group">
+
+			            <label class="col-sm-5 control-label">Start Number</label>
+
+			            <div class="col-sm-3">
+
+			                <input 
+			                    class="form-control" 
+			                    name="new_autoincrement" 
+			                    type="number" 
+			                    ng-model="options.new_autoincrement" />
+
+			            </div>
+
+			            <div class="col-sm-4">
+			            	<button 
+				            	class="btn btn-danger"
+				            	ng-click="options.saveAutoIncrement()">
+			            		<i class="glyphicon glyphicon-floppy-disk"></i>
+			            		Save
+			            	</button>
+			            </div>
+
+			        </div>
+
+		        </div>
+	        </div>
+	        
+    	</div>
+
+    	<div class="col-sm-5">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">Set Default Values</div>
+				<div class="panel-body">
+
+			        <div 
+			            class="form-group">
+
+			            <label class="col-sm-5 control-label">Prepared By</label>
+
+			            <div class="col-sm-7">
+
+			                <input 
+			                    class="form-control" 
+			                    name="new_prepared_by" 
+			                    type="text" 
+			                    ng-model="options.new_prepared_by" />
+
+			            </div>
+
+			        </div>
+
+			        <div 
+			            class="form-group">
+
+			            <label class="col-sm-5 control-label">Noted By</label>
+
+			            <div class="col-sm-7">
+
+			                <input 
+			                    class="form-control" 
+			                    name="new_noted_by" 
+			                    type="text" 
+			                    ng-model="options.new_noted_by" />
+
+			            </div>
+
+			        </div>
+
+			        <hr />
+
+	            	<button 
+		            	class="btn btn-primary"
+		            	ng-click="options.saveDefaultValues()">
+	            		<i class="glyphicon glyphicon-floppy-disk"></i>
+	            		Save
+	            	</button>
+
+
+		        </div>
+	        </div>
+	        
+    	</div>
+
+	</div>
+
+</div>

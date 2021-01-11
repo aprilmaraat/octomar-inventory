@@ -1,0 +1,181 @@
+<div class="page-header">
+	<h1>Delivery Receipt Listing</h1>
+</div>
+
+<listing-builder input-model="list.inputModel" list="list.records" set-order-callback="list.setOrder" search-callback="list.searchRecord" listing-only="true" additional-options="list.additionalOptions"></listing-builder>
+
+<nav>
+	<ul class="pagination">
+		<li ng-if="list.first > 0">
+			<a aria-label="First" ng-click="list.viewList(list.first)">
+				<span aria-hidden="true"><<</span>
+			</a>
+		</li>
+		<li ng-if="list.prev > 0">
+			<a aria-label="Previous" ng-click="list.viewList(list.prev)">
+				<span aria-hidden="true"><</span>
+			</a>
+		</li>
+		<li ng-if="list.next > 0">
+			<a aria-label="Next" ng-click="list.viewList(list.next)">
+				<span aria-hidden="true">></span>
+			</a>
+		</li>
+		<li ng-if="list.last > 0">
+			<a aria-label="Last" ng-click="list.viewList(list.last)">
+				<span aria-hidden="true">>></span>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+<div class="modal fade" id="mdlPrintout" tabindex="-1" role="dialog" data-backdrop="false">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Delivery Receipt Printout</h4>
+			</div>
+			<div class="modal-body">
+
+				<div class="text-center">
+					<h1>OCTOMAR TRADING</h1>
+					Lucio Racuma SR., P.5, San Jose, Malaybalay City<br />
+					Tel./Fax: (032)-4903719/ (032)-4909031<br />
+					Cell: 09228994508
+				</div>
+
+				<div>
+
+					<div style="width: 50%; float: left;">
+						<h4>Delivery Receipt</h4>
+					</div>
+
+					<div style="width: 50%; float: left; text-align: right;">
+						<h4>No. {! list.currentTransaction.id | padleft:'0':7 !}</h4>
+					</div>
+
+					<div style="clear: both;"></div>
+
+				</div>
+
+				<div style="padding: 10px;">
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Customer:</strong> 
+							{! list.currentTransaction.transactor.name !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Date:</strong> 
+							{! list.currentTransaction.trans_date !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Tel#:</strong> 
+							{! list.currentTransaction.transactor.tel_no !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>PO#:</strong> 
+							{! list.currentTransaction.ref_no !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Address:</strong> {! list.currentTransaction.transactor.address !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Terms:</strong> 
+							{! list.currentTransaction.remarks !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+				</div>
+
+				<div>
+					<table class="table table-bordered table-condensed">
+
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Item</th>
+								<th>Qty</th>
+								<th>Unit Price</th>
+								<th>Amount</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="detail in list.currentTransactionDetails track by $index">
+								<td>{! $index + 1 !}</td>
+								<td>{! detail.item.name !}</td>
+								<td>{! detail.qty !}</td>
+								<td style="text-align: right;">{! detail.trans_price | number:2 !}</td>
+								<td style="text-align: right;">{! detail.qty * detail.trans_price | number:2 !}</td>
+							</tr>
+							<tr>
+								<td colspan=4 style="text-align: right;">Total: </td>
+								<td style="text-align: right;">{! list.printTotal | number:2 !}</td>
+							</tr>
+						</tbody>
+
+					</table>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Prepared By:</strong> 
+							{! list.currentTransaction.prepared_by !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Received the above items in good order and condition</strong><br />
+							<div>
+								<strong>By:</strong> 
+							</div>
+							<div>
+								<strong>Date:</strong> 
+							</div>
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button 
+					type="button" 
+					class="btn btn-default" 
+					data-dismiss="modal">
+					Close
+				</button>
+				<button 
+					type="button" 
+					class="btn btn-primary" 
+					ng-click="list.gotoPrintout()">
+					Print
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

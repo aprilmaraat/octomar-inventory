@@ -1,0 +1,31 @@
+<div>
+{! '&nbsp;' | padleft: '&nbsp;':25 !}<span style="font-size: 24px;">OCTOMAR TRADING</span> <br />
+{! 'Lucio Racuma SR., P.5, San Jose, Malaybalay City' | padleft: '&nbsp;':62 !} <br />
+{! 'Tel./Fax: (032)-4903719/ (032)-4909031' | padleft: '&nbsp;':56 !} <br />
+{! 'Cell: 09228994508' | padleft: '&nbsp;':46 !} <br />
+{! 'Email: octomartrading@gmail.com' | padleft: '&nbsp;':53 !} <br />
+ <br />
+CMDM#{! ':' | padleft: '&nbsp;':14 !} {! printout.transactionID | padleft !} <br />
+DATE{! ':' | padleft: '&nbsp;':15 !} {! printout.printDate !} <br />
+CUSTOMER/SUPPLIER : <span style="font-size: 20px;">{! printout.transaction.transactor.name !}</span> <br />
+ADDRESS{! ':' | padleft: '&nbsp;':12 !} {! printout.transaction.transactor.address !} <br />
+DR#{! ':' | padleft: '&nbsp;':16 !} {! printout.transaction.ref_no | padleft !} <br />
+
+================================================================================ <br />
+&nbsp;QTY{! '&nbsp;' | padleft: '&nbsp;':2 !}
+UNIT{! '&nbsp;' | padleft: '&nbsp;':30 !}
+PARTICULAR{! '&nbsp;' | padleft: '&nbsp;':27 !}<br />
+----- ------ -------------------------------------------------------------------<br />
+<div ng-repeat="detail in printout.transactionDetails track by $index">
+	<div ng-if="detail">
+	{! detail.qty | padleft: '&nbsp;':5 !}
+	{! detail.item.unit | padleft: '&nbsp;':6 !}
+	{! detail.item.name | padright: '&nbsp;':66 !}
+	</div>
+	<div ng-if="!detail">
+	&nbsp;
+	</div>
+</div>
+----- ------ -------------------------------------------------------------------<br /><br />
+{! 'PREPARED BY: ' + printout.transaction.prepared_by | padright: '&nbsp;':40 !}
+{! 'NOTED BY: ' + printout.transaction.noted_by | padleft: '&nbsp;':40 !}

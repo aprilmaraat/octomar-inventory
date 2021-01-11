@@ -1,0 +1,589 @@
+<div class="page-header">
+	<h1>Delivery Receipt</h1>
+</div>
+
+<form name="invoiceForm" novalidate ng-submit="invoice.save(invoiceForm)">
+
+    <div class="form-horizontal">
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['cust_name'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Customer Name</label>
+
+		            <div class="col-sm-10">
+
+	                    <md-autocomplete
+	                        md-input-name="cust_name"
+	                        required="true"
+	                        class="form-control"
+	                        md-menu-class="for-increase"
+	                        md-no-cache="true"
+	                        md-selected-item="invoice.selectedCustomer"
+	                        md-selected-item-change="invoice.selectedCustomerChange(item)"
+	                        md-search-text="invoice.searchCustomer"
+	                        md-items="item in invoice.customers | filter:invoice.searchCustomer"
+	                        md-item-text="item.name"
+	                        md-min-length="0"
+	                        placeholder="Search Customer..."
+	                        style="padding: 0;">
+	                        <md-item-template>
+								<span class="item-title">
+									<strong> {! item.name !} </strong>
+								</span>
+								<span class="item-metadata">
+									<span class="item-metastat">
+										<small>{{ item.address }}</small>
+									</span>
+								</span>
+	                        </md-item-template>
+	                        <md-not-found>
+	                            No Item Found
+	                        </md-not-found>
+	                    </md-autocomplete>
+
+	                    <span 
+	                        class="help-block" 
+	                        ng-show="invoiceForm['cust_name'].$error.required && invoiceForm.$submitted">
+	                        You must enter a Name
+	                    </span>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['trans_date'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Date</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                	ui-date
+		                    class="form-control" 
+		                    name="trans_date" 
+		                    type="text" 
+		                    ng-model="invoice.transaction.trans_date" 
+		                    ng-required="true" />
+
+	                    <span 
+	                        class="help-block" 
+	                        ng-show="invoiceForm['trans_date'].$error.required && invoiceForm.$submitted">
+	                        You must enter a Date
+	                    </span>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['cust_tel_no'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Tel#</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="cust_tel_no" 
+		                    type="tel_no" 
+		                    ng-model="invoice.customer.tel_no"
+		                    ng-disabled="invoice.selectedCustomer" />
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['ref_no'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">PO#</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="ref_no" 
+		                    type="text" 
+		                    ng-model="invoice.transaction.ref_no" />
+
+		            </div>
+
+		        </div>
+
+	    	</div>
+
+        </div>
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['cust_address'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Address</label>
+
+		            <div class="col-sm-10">
+
+		                <textarea 
+		                    class="form-control" 
+		                    name="cust_address" 
+		                    ng-model="invoice.customer.address" 
+		                    ng-disabled="invoice.selectedCustomer"></textarea>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['remarks'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Terms</label>
+
+		            <div class="col-sm-10">
+
+		                <textarea 
+		                    class="form-control" 
+		                    name="remarks" 
+		                    ng-model="invoice.transaction.remarks"></textarea>
+
+		            </div>
+
+		        </div>
+
+	    	</div>
+
+        </div>
+
+    	<div class="row">
+
+	    	<div class="col-sm-5 col-sm-offset-6">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['prepared_by'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Prepared By</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="prepared_by" 
+		                    type="text" 
+		                    ng-model="invoice.transaction.prepared_by" />
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+
+    </div>
+
+	<div class="page-header">
+		<h4>Details</h4>
+	</div>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Item</th>
+				<th>Unit</th>
+				<th>Base Price</th>
+				<th style="width: 97px;">Qty</th>
+				<th style="width: 158px;">Discount</th>
+				<th style="width: 158px;">Unit Price</th>
+				<th>Amount</th>
+				<th style="width: 76px;">Options</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td></td>
+				<td>
+                    <md-autocomplete
+                        class="form-control"
+                        md-no-cache="true"
+                        md-selected-item="invoice.currentDetail.item"
+                        md-selected-item-change="invoice.selectedItemChange(item)"
+                        md-search-text="invoice.searchText"
+                        md-items="item in invoice.items | filter:invoice.searchText"
+                        md-item-text="item.name"
+                        md-min-length="0"
+                        placeholder="Search Item..."
+                        style="padding: 0;">
+                        <md-item-template>
+							<span class="item-title">
+								<strong> {! item.name !} </strong>
+							</span>
+							<span class="item-metadata">
+								<span class="item-metastat">
+									<small>Php {{ item.base_price }} -</small>
+								</span>
+								<span class="item-metastat">
+									<small>SOH: {{ item.total_inventory }}</small>
+								</span>
+							</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No Item Found
+                        </md-not-found>
+                    </md-autocomplete>
+				</td>
+				<td>
+	                {! invoice.currentDetail.item.unit !}
+	            </td>
+				<td>
+	                {! invoice.currentDetail.item.base_price | number:2 !}
+	            </td>
+				<td>
+	                <input 
+	                    class="form-control" 
+	                    type="number"
+	                    ng-model="invoice.currentDetail.qty"
+	                    ng-change="invoice.checkDetailQty()" />
+	            </td>
+				<td>
+
+					<div class="input-group">
+
+		                <input 
+		                    class="form-control" 
+		                    type="number" 
+	                    	style="width: 100px;"
+		                    ng-model="invoice.currentDetail.discount.amount"
+	                    	ng-change="invoice.checkDetailDiscount()" />
+
+	      				<div class="input-group-btn">
+							<button 
+								type="button" 
+								class="btn btn-default dropdown-toggle" 
+								data-toggle="dropdown" 
+								aria-haspopup="true" 
+								aria-expanded="false">
+								{! invoice.currentDetail.discount.type !} <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a ng-click="invoice.currentDetail.discount.type = '+'">+ (Plus)</a></li>
+								<li><a ng-click="invoice.currentDetail.discount.type = '-'">- (Minus)</a></li>
+							</ul>
+						</div>
+                    </div>
+	            </td>
+				<td>
+	                <input 
+	                    class="form-control" 
+	                    type="number"
+	                    disabled 
+	                    ng-if="invoice.currentDetail.discount.amount"
+	                    value="{! invoice.getDiscountAmount(invoice.currentDetail) | number:2 !}" />
+	                <input 
+	                    class="form-control" 
+	                    type="number"
+	                    ng-if="!invoice.currentDetail.discount.amount"
+	                    ng-model="invoice.currentDetail.trans_price" />
+				</td>
+				<td>
+					<span ng-if="invoice.currentDetail.discount.amount">
+						{! invoice.currentDetail.qty * invoice.getDiscountAmount(invoice.currentDetail) | number:2 !}
+					</span>
+					<span ng-if="!invoice.currentDetail.discount.amount">
+						{! invoice.currentDetail.qty * invoice.currentDetail.trans_price | number:2 !}
+					</span>
+				</td>
+				<td>
+					
+	                <button 
+		                type="button" 
+		                class="btn btn-sm btn-default"
+		                ng-if="invoice.currentDetailIdx == -1"
+		                ng-click="invoice.addDetail()">
+	                    <i class="glyphicon glyphicon-plus"></i>
+	                    Add
+	                </button>
+		            <div 
+		            	class="btn-group"
+		            	ng-if="invoice.currentDetailIdx != -1">
+		                <button 
+			                type="button" 
+			                class="btn btn-sm btn-default"
+			                ng-click="invoice.updateDetail()">
+	                        <i class="glyphicon glyphicon-floppy-disk"></i>
+		                </button>
+		                <button 
+			                type="button" 
+			                class="btn btn-sm btn-default"
+			                ng-click="invoice.clearDetail()">
+	                        <i class="glyphicon glyphicon-ban-circle"></i>
+		                </button>
+		        	</div>
+
+				</td>
+			</tr>
+			<tr ng-repeat="detail in invoice.transactionDetails track by $index">
+				<td>{! $index + 1 !}</td>
+				<td>
+					{! detail.item.name !}<br />
+	                <small>{! detail.item.description !}</small>
+				</td>
+				<td>{! detail.item.unit !}</td>
+				<td>{! detail.item.base_price !}</td>
+				<td>{! detail.qty !}</td>
+				<td>{! detail.discount.type !}{! detail.discount.amount !}%</td>
+				<td class="text-right">{! detail.trans_price | number:2 !}</td>
+				<td class="text-right">{! detail.qty * detail.trans_price | number:2 !}</td>
+				<td>
+					
+		            <div class="btn-group">
+		                <button 
+			                type="button" 
+			                class="btn btn-sm btn-default"
+			                ng-click="invoice.editDetail(detail)">
+	                        <i class="glyphicon glyphicon-pencil"></i>
+		                </button>
+		                <button 
+			                type="button" 
+			                class="btn btn-sm btn-default"
+			                ng-click="invoice.deleteDetail(detail)">
+	                        <i class="glyphicon glyphicon-remove"></i>
+		                </button>
+		        	</div>
+
+				</td>
+			</tr>
+			<tr ng-if="invoice.transactionDetails.length > 0">
+				<td colspan=7 class="text-right">Total: </td>
+				<td class="text-right">{! invoice.getTotal() | number:2 !}</td>
+				<td></td>
+			</tr>
+			<tr ng-if="invoice.transactionDetails.length == 0">
+				<td colspan="9" class="text-center">Add Items</td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<div class="well">
+
+        <button 
+            type="submit" 
+            class="btn btn-lg btn-primary">
+            <i class="glyphicon glyphicon-floppy-disk"></i>
+            Save
+        </button>
+
+        <button 
+            type="button" 
+            class="btn btn-lg btn-default"
+            ng-click="invoice.clear(invoiceForm)">
+            Clear
+        </button>
+
+	</div>
+
+</form>
+
+<div class="modal fade" id="mdlPrintout" tabindex="-1" role="dialog" data-backdrop="false">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Sales Invoice Printout</h4>
+			</div>
+			<div class="modal-body">
+
+				<div class="text-center">
+					<h1>OCTOMAR TRADING</h1>
+					Lucio Racuma SR., P.5, San Jose, Malaybalay City<br />
+					Tel./Fax: (032)-4903719/ (032)-4909031<br />
+					Cell: 09228994508
+				</div>
+
+				<div>
+
+					<div style="width: 50%; float: left;">
+						<h4>Delivery Receipt</h4>
+					</div>
+
+					<div style="width: 50%; float: right; text-align: right;">
+						<h4>No. {! invoice.transactionID |  padleft:'0':7 !}</h4>
+					</div>
+
+					<div style="clear: both;"></div>
+
+				</div>
+
+				<div style="padding: 10px;">
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Customer:</strong> 
+							{! invoice.searchCustomer !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Date:</strong> 
+							{! invoice.printDate !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Tel#:</strong> 
+							{! invoice.customer.tel_no !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>PO#:</strong> 
+							{! invoice.transaction.ref_no !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Address:</strong> {! invoice.customer.address !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Terms:</strong> 
+							{! invoice.transaction.remarks !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Prepared By:</strong> 
+							{! invoice.transaction.prepared_by !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+				</div>
+
+				<div>
+					<table class="table table-bordered table-condensed">
+
+						<thead>
+							<tr>
+								<th>Qty</th>
+								<th>Unit</th>
+								<th>Particulars</th>
+								<th>Discount</th>
+								<th>Unit Price</th>
+								<th>Amount</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="detail in invoice.transactionDetails track by $index">
+								<td>{! detail.qty !}</td>
+								<td>{! detail.item.unit !}</td>
+								<td>{! detail.item.name !}</td>
+								<td>{! detail.discount.type !}{! detail.discount.amount !}%</td>
+								<td style="text-align: right;">{! detail.trans_price | number:2 !}</td>
+								<td style="text-align: right;">{! detail.qty * detail.trans_price | number:2 !}</td>
+							</tr>
+							<tr>
+								<td colspan=5 style="text-align: right;">Total: </td>
+								<td style="text-align: right;">{! invoice.printTotal | number:2 !}</td>
+							</tr>
+						</tbody>
+
+					</table>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Prepared By:</strong> 
+							{! invoice.transaction.prepared_by !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Received the above items in good order and condition</strong><br />
+							<div>
+								<strong>By:</strong> 
+							</div>
+							<div>
+								<strong>Date:</strong> 
+							</div>
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button 
+					type="button" 
+					class="btn btn-default" 
+					data-dismiss="modal"
+					ng-click="invoice.clear(invoiceForm)">
+					Close
+				</button>
+				<button 
+					type="button" 
+					class="btn btn-primary"
+					ng-click="invoice.gotoPrintout()">
+					Print
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

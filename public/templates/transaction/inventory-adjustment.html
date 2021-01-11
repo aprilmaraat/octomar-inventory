@@ -1,0 +1,494 @@
+<div class="page-header">
+	<h1>Credit/Debit Memo</h1>
+</div>
+
+<form name="adjustmentForm" novalidate ng-submit="adjust.save(adjustmentForm)">
+
+    <div class="form-horizontal">
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': adjustmentForm['cust_name'].$invalid && adjustmentForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Customer/ Supplier Name</label>
+
+		            <div class="col-sm-10">
+
+	                    <md-autocomplete
+	                        md-input-name="cust_name"
+	                        required="true"
+	                        class="form-control"
+	                        md-no-cache="true"
+	                        md-selected-item="adjust.selectedTransactor"
+	                        md-selected-item-change="adjust.selectedTransactorChange(item)"
+	                        md-search-text="adjust.searchTransactor"
+	                        md-items="item in adjust.transactors | filter:adjust.searchTransactor"
+	                        md-item-text="item.name"
+	                        md-min-length="0"
+	                        placeholder="Search Customer/Supplier..."
+	                        style="padding: 0;">
+	                        <md-item-template>
+								<span class="item-title">
+									<strong> {! item.name !} </strong>
+								</span>
+								<span class="item-metadata">
+									<span class="item-metastat">
+										<small>{{ item.address }}</small>
+									</span>
+								</span>
+	                        </md-item-template>
+	                        <md-not-found>
+	                            No Item Found
+	                        </md-not-found>
+	                    </md-autocomplete>
+
+	                    <span 
+	                        class="help-block" 
+	                        ng-show="adjustmentForm['cust_name'].$error.required && adjustmentForm.$submitted">
+	                        You must enter a Name
+	                    </span>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': adjustmentForm['trans_date'].$invalid && adjustmentForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Date</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                	ui-date
+		                    class="form-control" 
+		                    name="trans_date" 
+		                    type="text" 
+		                    ng-model="adjust.transaction.trans_date" 
+		                    ng-required="true" />
+
+	                    <span 
+	                        class="help-block" 
+	                        ng-show="adjustmentForm['trans_date'].$error.required && adjustmentForm.$submitted">
+	                        You must enter a Date
+	                    </span>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': adjustmentForm['cust_tel_no'].$invalid && adjustmentForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Tel#</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="cust_tel_no" 
+		                    type="tel_no" 
+		                    ng-model="adjust.transactor.tel_no"
+		                    ng-disabled="adjust.selectedTransactor" />
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': adjustmentForm['ref_no'].$invalid && adjustmentForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">DR#</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="ref_no" 
+		                    type="text" 
+		                    ng-model="adjust.transaction.ref_no" />
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': adjustmentForm['cust_address'].$invalid && adjustmentForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Address</label>
+
+		            <div class="col-sm-10">
+
+		                <textarea 
+		                    class="form-control" 
+		                    name="cust_address" 
+		                    ng-model="adjust.transactor.address" 
+		                    ng-disabled="adjust.selectedTransactor"></textarea>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': adjustmentForm['remarks'].$invalid && adjustmentForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Remarks</label>
+
+		            <div class="col-sm-10">
+
+		                <textarea 
+		                    class="form-control" 
+		                    name="remarks" 
+		                    ng-model="adjust.transaction.remarks"></textarea>
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+
+
+
+    	<div class="row">
+
+	    	<div class="col-sm-5">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['prepared_by'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Prepared By</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="prepared_by" 
+		                    type="text" 
+		                    ng-model="adjust.transaction.prepared_by" />
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+	    	<div class="col-sm-5 col-sm-offset-1">
+
+		        <div 
+		            class="form-group" 
+		            ng-class="{ 'has-error': invoiceForm['noted_by'].$invalid && invoiceForm.$submitted }">
+
+		            <label class="col-sm-2 control-label">Noted By</label>
+
+		            <div class="col-sm-10">
+
+		                <input 
+		                    class="form-control" 
+		                    name="noted_by" 
+		                    type="text" 
+		                    ng-model="adjust.transaction.noted_by" />
+
+		            </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+
+    </div>
+
+	<div class="page-header">
+		<h4>Adjustment Details</h4>
+	</div>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Item</th>
+				<th>Qty</th>
+				<th>Options</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td></td>
+				<td>
+                    <md-autocomplete
+                        class="form-control"
+                        md-no-cache="true"
+                        md-selected-item="adjust.currentDetail.item"
+                        md-search-text="adjust.searchText"
+                        md-items="item in adjust.items | filter:adjust.searchText"
+                        md-item-text="item.name"
+                        md-min-length="0"
+                        placeholder="Search Item..."
+                        style="padding: 0;">
+                        <md-item-template>
+							<span class="item-title">
+								<strong> {! item.name !} </strong>
+							</span>
+							<span class="item-metadata">
+								<span class="item-metastat">
+									<small>SOH: {{ item.total_inventory }}</small>
+								</span>
+							</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No Item Found
+                        </md-not-found>
+                    </md-autocomplete>
+				</td>
+				<td>
+	                <input 
+	                    class="form-control" 
+	                    type="text" 
+	                    ng-model="adjust.currentDetail.qty" />
+	            </td>
+				<td>
+					
+	                <button 
+		                type="button" 
+		                class="btn btn-sm btn-default"
+		                ng-if="adjust.currentDetailIdx == -1"
+		                ng-click="adjust.addDetail()">
+	                    <i class="glyphicon glyphicon-plus"></i>
+	                    Add
+	                </button>
+	                <button 
+		                type="button" 
+		                class="btn btn-sm btn-default"
+		                ng-if="adjust.currentDetailIdx != -1"
+		                ng-click="adjust.updateDetail()">
+	                    <i class="glyphicon glyphicon-floppy-disk"></i>
+	                    Save
+	                </button>
+
+				</td>
+			</tr>
+			<tr ng-repeat="detail in adjust.transactionDetails track by $index">
+				<td>{! $index + 1 !}</td>
+				<td>
+					{! detail.item.name !}<br />
+	                <small>{! detail.item.description !}</small>
+				</td>
+				<td>{! detail.qty !}</td>
+				<td>
+					
+		            <div class="btn-group">
+		                <button 
+			                type="button" 
+			                class="btn btn-sm btn-default"
+			                ng-click="adjust.editDetail(detail)">
+	                        <i class="glyphicon glyphicon-pencil"></i>
+		                </button>
+		                <button 
+			                type="button" 
+			                class="btn btn-sm btn-default"
+			                ng-click="adjust.deleteDetail(detail)">
+	                        <i class="glyphicon glyphicon-remove"></i>
+		                </button>
+		        	</div>
+
+				</td>
+			</tr>
+			<tr ng-if="adjust.transactionDetails.length == 0">
+				<td colspan="5" class="text-center">Add Items</td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<div class="well">
+
+        <button 
+            type="submit" 
+            class="btn btn-lg btn-primary">
+            <i class="glyphicon glyphicon-floppy-disk"></i>
+            Save
+        </button>
+
+	</div>
+
+</form>
+
+<div class="modal fade" id="mdlPrintout" tabindex="-1" role="dialog" data-backdrop="false">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Credit/Debit Memo Printout</h4>
+			</div>
+			<div class="modal-body" print-section>
+
+				<div class="text-center">
+					<h1>OCTOMAR TRADING</h1>
+					Lucio Racuma SR., P.5, San Jose, Malaybalay City<br />
+					Tel./Fax: (032)-4903719/ (032)-4909031<br />
+					Cell: 09228994508
+				</div>
+
+				<div>
+
+					<div style="width: 50%; float: left;">
+						<h4>Credit/Debit Memo</h4>
+					</div>
+
+					<div style="width: 50%; float: left; text-align: right;">
+						<h4>No. {! adjust.transactionID | padleft !}</h4>
+					</div>
+
+					<div style="clear: both;"></div>
+
+				</div>
+
+				<div style="padding: 10px;">
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Customer/Supplier:</strong> 
+							{! adjust.searchTransactor !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Date:</strong> 
+							{! adjust.printDate !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Tel#:</strong> 
+							{! adjust.transactor.tel_no !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>DR#:</strong> 
+							{! adjust.transaction.ref_no !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Address:</strong> {! adjust.transactor.address !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Remarks:</strong> 
+							{! adjust.transaction.remarks !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+				</div>
+
+				<div>
+					<table class="table table-bordered table-condensed">
+
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Item</th>
+								<th>Qty</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="detail in adjust.transactionDetails track by $index">
+								<td>{! $index + 1 !}</td>
+								<td>{! detail.item.name !}</td>
+								<td>{! detail.qty !}</td>
+							</tr>
+						</tbody>
+
+					</table>
+
+					<div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Prepared By:</strong> 
+							{! adjust.transaction.prepared_by !}
+						</div>
+
+						<div style="width: 50%; float: left;">
+							<strong>Noted By:</strong> 
+							{! adjust.transaction.noted_by !}
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button 
+					type="button" 
+					class="btn btn-default" 
+					data-dismiss="modal"
+					ng-click="adjust.clear(adjustmentForm)">
+					Close
+				</button>
+				<button 
+					type="button" 
+					class="btn btn-primary"
+					ng-click="adjust.gotoPrintout()">
+					Print
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

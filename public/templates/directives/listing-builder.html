@@ -1,0 +1,237 @@
+<div class="well well-sm">
+
+    <div class="pull-left form-inline">
+
+        <label>Search</label>
+        <div class="form-group">
+            <input class="form-control" type="text" ng-model="builder.searchText" ng-model-options="{ debounce: 300 }" ng-change="builder.search()" />
+        </div>
+
+    </div>
+
+    <div class="pull-right" ng-if="!listingOnly">
+        <button type="button" class="btn btn-default" ng-click="builder.newModel()">
+            <i class="glyphicon glyphicon-plus"></i>
+            Add New
+        </button>
+    </div>
+
+    <div class="clearfix"></div>
+
+</div>
+
+<table class="table table-bordered table-condensed">
+
+<thead>
+    <tr>
+        <th ng-repeat="input in inputModel track by $index" ng-class="input.options.header.class">
+            <div ng-click="builder.setOrder(input.name)">
+                <span ng-if="input.label != '#NONE'">{! input.label ? input.label : input.name !}</span>
+                <i class="glyphicon glyphicon glyphicon-menu-up" ng-if="builder.order.with == input.name && !builder.order.isASC"></i>
+                <i class="glyphicon glyphicon glyphicon-menu-down" ng-if="builder.order.with == input.name && builder.order.isASC"></i>
+            </div>
+        </th>
+        <th style="width: 90px;" ng-if="!listingOnly || additionalOptions.length > 0">Actions</th>
+    </tr>
+</thead>
+
+<tbody>
+
+    <tr ng-repeat="item in list track by $index">
+        <td ng-repeat="input in inputModel track by $index">
+
+            <span ng-if="input.type != 'text-multiple' && input.type != 'complex' && input.type != 'checkbox' && input.type != 'select'">
+                {! item[input.name] !}
+            </span>
+
+            <span ng-if="input.type == 'select'">
+                {! input.selectOptions[item[input.name]].label !}
+            </span>
+
+            <div ng-if="input.type == 'complex'">
+                <div ng-repeat="complexObj in input.complex track by $index">
+
+                    <label ng-if="complexObj.label != '#NONE'">{! complexObj.label ? complexObj.label : complexObj.name !}</label>
+
+                    <div ng-if="complexObj.type != 'text-multiple' && complexObj.type != 'checkbox'">
+                        {! item[input.name][complexObj.name] !}
+                    </div>
+
+                    <div ng-if="complexObj.type == 'text-multiple'">
+                        <div ng-repeat="data in item[input.name][complexObj.name] track by $index">
+                            {! data !}
+                        </div>
+                    </div>
+
+                    <span ng-if="complexObj.type == 'checkbox'">
+                        <i ng-if="item[input.name][complexObj.name] == true" class="glyphicon glyphicon-ok text-success"></i>
+                        <i ng-if="item[input.name][complexObj.name] == false" class="glyphicon glyphicon-remove text-danger"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div ng-if="input.type == 'text-multiple'">
+                <div ng-repeat="data in item[input.name] track by $index">
+                    {! data !}
+                </div>
+            </div>
+
+            <div ng-if="input.type == 'checkbox'">
+                <i ng-if="item[input.name] == true" class="glyphicon glyphicon-ok text-success"></i>
+                <i ng-if="item[input.name] == false" class="glyphicon glyphicon-remove text-danger"></i>
+            </div>
+
+        </td>
+
+        <td ng-if="!listingOnly || additionalOptions.length > 0">
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li
+                    ng-repeat="opt in additionalOptions track by $index"
+                    ng-if="!opt.show || builder.showAdditionalOptions(item, opt.show)"
+                    ng-click="opt.function(item)">
+                        <a href="javascript:void(0);">
+                            {! opt.label !}
+                        </a>
+                    </li>
+                    <li role="separator" class="divider" ng-if="additionalOptions && !listingOnly"></li>
+                    <li ng-click="builder.editModel(item)" ng-if="!listingOnly">
+                        <a href="javascript:void(0);">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            EDIT
+                        </a>
+                    </li>
+                    <li ng-click="builder.deleteModel(item)" ng-if="!listingOnly">
+                        <a href="javascript:void(0);">
+                            <i class="glyphicon glyphicon-remove"></i>
+                            DELETE
+                        </a>
+                    </li>
+                </ul>
+
+        </div>
+
+        </td>
+
+    </tr>
+
+    <tr ng-if="list.length == 0">
+        <td colspan="{! inputModel.length + 1 !}" class="text-center">
+            No records found!
+        </td>
+    </tr>
+
+</tbody>
+
+</table>
+
+<div ng-if="!listingOnly" class="modal fade" id="mdlForm" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add New</h4>
+            </div>
+
+            <form name="listingBuilderForm" novalidate ng-submit="builder.saveModel(listingBuilderForm)">
+
+                <div class="modal-body">
+
+                    <div class="form-horizontal">
+
+                        <div class="form-group" ng-repeat="input in inputModel track by $index" ng-class="{ 'has-error': listingBuilderForm[input.name].$invalid && listingBuilderForm.$submitted }">
+
+                            <label class="col-sm-2 control-label">{! input.label ? input.label : input.name !}</label>
+
+                            <div class="col-sm-10">
+
+                                <input class="form-control" name="{! input.name !}" ng-if="input.type == 'text'" type="text" ng-model="builder.model[input.name]" ng-required="input.required" />
+
+                                <input class="form-control" name="{! input.name !}" ng-if="input.type == 'checkbox'" type="checkbox" ng-model="builder.model[input.name]" ng-required="input.required" />
+
+                                <select class="form-control" ng-if="input.type == 'select'" ng-model="builder.model[input.name]" ng-required="input.required" ng-options="optionObj.value as optionObj.label for optionObj in input.selectOptions">
+                                </select>
+
+                                <textarea class="form-control" name="{! input.name !}" ng-if="input.type == 'textarea'" ng-model="builder.model[input.name]" ng-required="input.required"></textarea>
+
+                                <div ng-if="input.type == 'text-multiple'">
+
+                                    <div ng-repeat="multipleObj in builder.model[input.name] track by $index" class="form-group has-feedback" style="margin-right: 0; margin-left: 0;">
+                                        <input class="form-control" name="{! input.name !}" type="text" ng-model="multipleObj.text" ng-required="input.required" />
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" ng-click="builder.removeTextMultiple(builder.model, input.name, $index)"></span>
+                                    </div>
+
+                                    <button ng-if="input.limit == 0" type="button" class="btn btn-default" ng-click="builder.addTextMultiple(builder.model, input.name)">
+                                        Add
+                                    </button>
+
+                                </div>
+
+                                <span ng-show="listingBuilderForm[input.name].$error.required && listingBuilderForm.$submitted" class="help-block">You must enter a {! input.label ? input.label : input.name !}</span>
+
+                            </div>
+
+                            <div ng-if="input.type == 'complex'" class="col-sm-10">
+
+                                <div class="row" ng-repeat="complexObj in input.complex track by $index" ng-class="{ 'has-error': listingBuilderForm[complexObj.name].$invalid && listingBuilderForm.$submitted }">
+
+                                    <label class="col-sm-2 control-label">{! complexObj.label ? complexObj.label : complexObj.name !}</label>
+
+                                    <div class="col-sm-10">
+
+                                        <input class="form-control" name="{! complexObj.name !}" ng-if="complexObj.type == 'text'" type="text" ng-model="builder.model[input.name][complexObj.name]" ng-required="complexObj.required" />
+
+                                        <input class="form-control" name="{! complexObj.name !}" ng-if="complexObj.type == 'checkbox'" type="checkbox" ng-model="builder.model[input.name][complexObj.name]" ng-required="complexObj.required" />
+
+                                        <textarea class="form-control" name="{! complexObj.name !}" ng-if="complexObj.type == 'textarea'" ng-model="builder.model[input.name][complexObj.name]" ng-required="complexObj.required"></textarea>
+
+                                        <div ng-if="complexObj.type == 'text-multiple'">
+
+                                            <div ng-repeat="multipleObj in builder.model[input.name][complexObj.name] track by $index">
+                                                <input class="form-control" name="{! complexObj.name !}" type="text" ng-model="multipleObj.text" ng-required="complexObj.required" />
+                                            </div>
+
+                                            <button ng-if="input.limit == 0" type="button" class="btn btn-default" ng-click="builder.addTextMultiple(builder.model[input.name], complexObj.name)">
+                                                Add
+                                            </button>
+
+                                        </div>
+
+                                        <span ng-show="listingBuilderForm[complexObj.name].$error.required && listingBuilderForm.$submitted">You must enter a {! complexObj.label ? complexObj.label : complexObj.name !}</span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-floppy-disk"></i>
+                        Save
+                    </button>
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

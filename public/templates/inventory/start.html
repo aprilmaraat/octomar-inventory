@@ -1,0 +1,310 @@
+<div class="page-header">
+	<h1>Welcome to Octomar Inventory System</h1>
+</div>
+
+<div class="well well-sm">
+
+    <div class="pull-left form-inline">
+
+        <label>Search</label>
+        <div class="form-group">
+            <input class="form-control" type="text" ng-model="start.searchText" ng-model-options="{ debounce: 300 }" ng-change="start.searchRecord()" />
+        </div>
+
+        <button class="btn btn-default" ng-click="start.searchText = '';">
+        	Clear
+        </button>
+
+    </div>
+
+    <button class="btn btn-default pull-right" ng-click="start.printSummary()">
+    	Print Summary
+    </button>
+
+    <div class="clearfix"></div>
+
+</div>
+
+<table class="table table-bordered table-striped">
+
+	<thead>
+	    <tr class="info">
+	        <th>
+	            <div ng-click="start.setOrder('name')">
+	                Name
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="start.orderObj.with == 'name' && !start.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="start.orderObj.with == 'name' && start.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th>
+	            <div ng-click="start.setOrder('description')">
+	                Description
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="start.orderObj.with == 'description' && !start.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="start.orderObj.with == 'description' && start.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th>
+	            <div ng-click="start.setOrder('base_price')">
+	                Base Price
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-up" 
+		                ng-if="start.orderObj.with == 'base_price' && !start.orderObj.isASC"></i>
+	                <i 
+		                class="glyphicon glyphicon glyphicon-menu-down" 
+		                ng-if="start.orderObj.with == 'base_price' && start.orderObj.isASC"></i>
+	            </div>
+	        </th>
+	        <th>
+	            <div>
+	                Total Inventory
+	            </div>
+	        </th>
+	        <th style="width: 90px;">Actions</th>
+	    </tr>
+	</thead>
+
+	<tbody>
+
+		<tr ng-repeat="item in start.records track by $index">
+			<td ng-if="!item.viewHistory">{! item.name !}</td>
+			<td ng-if="!item.viewHistory">{! item.description !}</td>
+			<td
+				class="text-right" 
+				ng-if="!item.viewHistory">
+				{! item.base_price | number: 2 !}
+			</td>
+			<td 
+				class="text-right" 
+				ng-if="!item.viewHistory">
+				{! item.total_inventory | number: 0 !}
+			</td>
+			<td ng-if="!item.viewHistory">
+				<button
+					class="btn btn-primary btn-sm"
+					ng-click="start.showHistory(item)">
+					Show History
+				</button>
+			</td>
+			<td
+				colspan="5"
+				ng-if="item.viewHistory">
+				<button
+					class="btn btn-default btn-sm pull-right"
+					ng-click="start.hideHistory(item)">
+					Hide History
+				</button>
+				<div class="page-header">
+					<h4>{! item.name !} <small>{! item.base_price | number: 2 !}</small></h4>
+				</div>
+				<p>{! item.description !}</p>
+				<div>
+
+					<table class="table table-bordered table-condensed table-hover">
+						
+						<thead>
+							<tr class="warning">
+								<th>C/S</th>
+								<th>DR/PO/SI</th>
+								<th>IN</th>
+								<th>OUT</th>
+								<th>DATE</th>
+								<th>Total</th>
+								<th>Remarks</th>
+								<th style="width: 80px;"></th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td>
+				                    <md-autocomplete
+				                        class="form-control"
+				                        md-no-cache="true"
+				                        md-selected-item="item.adjustment.selectedTransactor"
+				                        md-search-text="item.adjustment.searchTransactor"
+				                        md-items="transactor in start.transactors | filter:item.adjustment.searchTransactor"
+				                        md-item-text="transactor.name"
+				                        md-min-length="0"
+				                        placeholder="Search Customer/Supplier..."
+				                        style="padding: 0;">
+				                        <md-item-template>
+											<span class="item-title">
+												<strong> {! transactor.name !} </strong>
+											</span>
+											<span class="item-metadata">
+												<span class="item-metastat">
+													<small>{{ transactor.address }}</small>
+												</span>
+											</span>
+				                        </md-item-template>
+				                        <md-not-found>
+				                            No Item Found
+				                        </md-not-found>
+				                    </md-autocomplete>
+								</td>
+								<td>
+									####
+								</td>
+								<td>
+					                <input 
+					                    class="form-control" 
+					                    type="text" 
+					                    ng-model="item.adjustment.in"
+					                    ng-change="console.log(item.adjustment.out);" />
+								</td>
+								<td>
+					                <input 
+					                    class="form-control" 
+					                    type="text" 
+					                    ng-model="item.adjustment.out"
+					                    ng-change="console.log(item.adjustment.in);" />
+								</td>
+								<td></td>
+								<td>
+									{! start.calculateAdjustedTotal(item) !}
+								</td>
+								<td>
+					                <textarea 
+					                    class="form-control"
+					                    ng-model="item.adjustment.remarks"></textarea>
+								</td>
+								<td>
+									<button
+										class="btn btn-default btn-sm pull-right"
+										style="width: 68px;"
+										ng-if="!item.adjustment.currentItemInventory"
+										ng-click="start.saveAdjustment(item)">
+										<i class="glyphicon glyphicon-floppy-disk"></i>
+										Save
+									</button>
+									<div 
+										class="btn-group"
+										ng-if="item.adjustment.currentItemInventory">
+										<button
+											class="btn btn-default btn-sm"
+											ng-click="start.saveAdjustment(item)">
+											<i class="glyphicon glyphicon-floppy-disk"></i>
+										</button>
+										<button
+											class="btn btn-default btn-sm"
+											ng-click="start.cancelCurrentAdjustment(item)">
+											<i class="glyphicon glyphicon-ban-circle"></i>
+										</button>
+									</div>
+								</td>
+							</tr>
+							<tr ng-repeat="itemInventory in item.itemInventories track by $index">
+								<td>
+									{! itemInventory.trans.transactor.name !}
+								</td>
+								<td>
+									{! itemInventory.trans.id | padleft !}
+								</td>
+								<td>
+									<span ng-if="itemInventory.qty > 0">
+										{! itemInventory.qty | number: 0 !}
+									</span>
+								</td>
+								<td>
+									<span ng-if="itemInventory.qty < 0">
+										{! itemInventory.qty * -1 | number: 0 !}
+									</span>
+								</td>
+								<td>{! itemInventory.trans.trans_date !}</td>
+								<td ng-class="{ 'danger': $index == 0 }">
+									{! itemInventory.lastTotal | number: 0 !}
+								</td>
+								<td>
+									{! itemInventory.trans.remarks !}
+								</td>
+								<td>
+									<button
+										class="btn btn-default btn-sm"
+										style="width: 68px;"
+										ng-if="itemInventory.trans_type == start.ITEM_INVENTORY_TYPE.INVOICE"
+										ng-click="start.updateSalesInvoice(itemInventory)">
+										<i class="glyphicon glyphicon-pencil"></i>
+										Edit
+									</button>
+									<div 
+										class="btn-group"
+										ng-if="itemInventory.trans_type == start.ITEM_INVENTORY_TYPE.ADJUSTMENT">
+										<button
+											class="btn btn-default btn-sm"
+											ng-click="start.editAdjustment(itemInventory, item)">
+											<i class="glyphicon glyphicon-pencil"></i>
+										</button>
+										<button
+											class="btn btn-default btn-sm"
+											ng-click="start.deleteAdjustment(itemInventory, item)">
+											<i class="glyphicon glyphicon-remove"></i>
+										</button>
+									</div>
+								</td>
+							</tr>
+							<tr ng-if="!item.loadingHistory && item.page != -1">
+								<td 
+									class="text-center" 
+									colspan="7"
+									ng-click="start.loadHistory(item)">
+									Click To Load More...
+								</td>
+							</tr>
+						</tbody>
+
+					</table>
+
+				</div>
+				<div class="text-center" ng-if="item.loadingHistory">
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+							<span class="sr-only">100% Complete</span>
+						</div>
+					</div>
+
+				</div>
+			</td>
+		</tr>
+
+	    <tr ng-if="start.records.length == 0">
+	        <td colspan="5" class="text-center">
+	            No records found!
+	        </td>
+	    </tr>
+
+	</tbody>
+
+</table>
+
+<nav>
+	<ul class="pagination">
+		<li ng-if="start.first > 0">
+			<a aria-label="First" ng-click="start.viewList(start.first)">
+				<span aria-hidden="true"><<</span>
+			</a>
+		</li>
+		<li ng-if="start.prev > 0">
+			<a aria-label="Previous" ng-click="start.viewList(start.prev)">
+				<span aria-hidden="true"><</span>
+			</a>
+		</li>
+		<li ng-if="start.next > 0">
+			<a aria-label="Next" ng-click="start.viewList(start.next)">
+				<span aria-hidden="true">></span>
+			</a>
+		</li>
+		<li ng-if="start.last > 0">
+			<a aria-label="Last" ng-click="start.viewList(start.last)">
+				<span aria-hidden="true">>></span>
+			</a>
+		</li>
+	</ul>
+</nav>
