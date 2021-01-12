@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "octomar/inventory",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The Octomar Inventory System",
     "keywords": [
         "framework",
         "laravel"
