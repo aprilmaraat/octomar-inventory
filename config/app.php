@@ -162,6 +162,16 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        App\Repositories\Customer\CustomerRepositoryServiceProvider::class,
+        App\Repositories\Supplier\SupplierRepositoryServiceProvider::class,
+        App\Repositories\Item\ItemRepositoryServiceProvider::class,
+        App\Repositories\ItemInventory\ItemInventoryRepositoryServiceProvider::class,
+        App\Repositories\SalesInvoice\SalesInvoiceRepositoryServiceProvider::class,
+        App\Repositories\SalesInvoiceDetail\SalesInvoiceDetailRepositoryServiceProvider::class,
+        App\Repositories\ItemInventoryAdjustmentDetail\ItemInventoryAdjustmentDetailRepositoryServiceProvider::class,
+        App\Repositories\ItemInventoryAdjustment\ItemInventoryAdjustmentRepositoryServiceProvider::class,
+        App\Repositories\Option\OptionRepositoryServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
