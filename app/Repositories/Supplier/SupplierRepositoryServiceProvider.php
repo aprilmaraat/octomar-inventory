@@ -9,8 +9,6 @@ class SupplierRepositoryServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('\App\Repositories\Supplier\SupplierRepositoryInterface', function () {
-            return new \App\Repositories\Supplier\SupplierRepository();
-        });
+        $this->app->bind(SupplierRepositoryInterface::class, SupplierRepository::class);
     }
 }

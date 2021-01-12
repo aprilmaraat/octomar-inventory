@@ -9,8 +9,6 @@ class SalesInvoiceRepositoryServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('\App\Repositories\SalesInvoice\SalesInvoiceRepositoryInterface', function () {
-            return new \App\Repositories\SalesInvoice\SalesInvoiceRepository();
-        });
+        $this->app->bind(SalesInvoiceRepositoryInterface::class, SalesInvoiceRepository::class);
     }
 }

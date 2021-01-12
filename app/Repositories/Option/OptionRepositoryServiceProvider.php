@@ -6,11 +6,10 @@ use Illuminate\Support\ServiceProvider;
 
 class OptionRepositoryServiceProvider extends ServiceProvider
 {
+    public function boot() {}
 
     public function register()
     {
-        $this->app->bind('\App\Repositories\Option\OptionRepositoryInterface', function () {
-            return new \App\Repositories\Option\OptionRepository();
-        });
+        $this->app->bind(OptionRepositoryInterface::class, OptionRepository::class);
     }
 }

@@ -9,8 +9,6 @@ class ItemRepositoryServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('\App\Repositories\Item\ItemRepositoryInterface', function () {
-            return new \App\Repositories\Item\ItemRepository();
-        });
+        $this->app->bind(ItemRepositoryInterface::class, ItemRepository::class);
     }
 }

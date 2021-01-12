@@ -9,8 +9,6 @@ class ItemInventoryAdjustmentDetailRepositoryServiceProvider extends ServiceProv
 
     public function register()
     {
-        $this->app->bind('\App\Repositories\ItemInventoryAdjustmentDetail\ItemInventoryAdjustmentDetailRepositoryInterface', function () {
-            return new \App\Repositories\ItemInventoryAdjustmentDetail\ItemInventoryAdjustmentDetailRepository();
-        });
+        $this->app->bind(ItemInventoryAdjustmentDetailRepositoryInterface::class, ItemInventoryAdjustmentDetailRepository::class);
     }
 }
